@@ -20,7 +20,7 @@ export const Login = () => {
             .then(res => res.json())
             .then(authInfo => {
                 if (authInfo.valid) {
-                    localStorage.setItem("rock_token", JSON.stringify(authInfo))
+                    localStorage.setItem("rater_token", JSON.stringify(authInfo))
                     navigate("/")
                 } else {
                     existDialog.current.showModal()
