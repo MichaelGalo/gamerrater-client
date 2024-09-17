@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 import { Navbar } from "../Navbar";
 import { Home } from "../views/Home";
+import { Games } from "../views/Games";
+import { GameDetails } from "../views/GameDetails";
 
 export const ApplicationsViews = () => {
     const [currentUser, setCurrentUser] = useState({});
@@ -23,6 +25,8 @@ export const ApplicationsViews = () => {
         }
       >
         <Route index element={<Home />} />
+        <Route path="games" element={<Games />} />
+        <Route path="games/:gameId" element={<GameDetails />} />
     </Route>
     </Routes>
     )

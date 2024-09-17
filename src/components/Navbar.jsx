@@ -4,21 +4,29 @@ export const Navbar = ({ currentUser }) => {
     return (
         <nav>
             <ul>
-                <li>
+                <div>
                     <Link to="/">Home</Link>
-                </li>
-                <li>
+                </div>
+                <div>
                     <Link to="/games">Games</Link>
-                </li>
-                <li>
+                </div>
+                <div>
                     <Link to="/reviews">Reviews</Link>
-                </li>
-                <li>
-                    <Link to="/logout">Logout</Link>
-                </li>
+                </div>
+                <div>
+                    {localStorage.getItem("rater_token") && (
+                    <Link
+                        to=""
+                        onClick={() => {
+                        localStorage.removeItem("rater_token");
+                        navigate("/login", { replace: true });
+                        }}
+                    >
+                        Logout
+                    </Link>
+                )}
+                </div>
             </ul>
         </nav>
     )
 }
-
-// TODO: actually build this out with some functionality (especially to the logout)
