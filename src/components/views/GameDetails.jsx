@@ -20,8 +20,6 @@ export const GameDetails = () => {
             })
     }, [gameId])
 
-    console.log(game)
-
     return (
         <div>
         <h1>{game.title}</h1>
@@ -31,7 +29,7 @@ export const GameDetails = () => {
         <p><strong>Estimated Time to Play:</strong> {game.estimated_time_to_play}</p>
         <p><strong>Age Recommendation:</strong> {game.age_recommendation}</p>
         <p><strong>Categories:</strong> {game.categories?.map((category)=>{
-            return <li>{category.name}</li>
+            return <li key={category.id}>{category.name}</li>
         })}</p>
         
     </div>
