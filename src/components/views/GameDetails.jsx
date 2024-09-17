@@ -23,6 +23,7 @@ export const GameDetails = () => {
     return (
         <div>
         <h1>{game.title}</h1>
+        <p>{game.description}</p>
         <p><strong>Designer:</strong> {game.designer}</p>
         <p><strong>Year Released:</strong> {game.year_released}</p>
         <p><strong>Number of Players:</strong> {game.number_of_players}</p>

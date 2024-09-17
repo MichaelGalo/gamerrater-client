@@ -8,8 +8,9 @@ export const NewGame = () => {
     const [numberOfPlayers, setNumberOfPlayers] = useState(0);
     const [estimatedTimeToPlay, setEstimatedTimeToPlay] = useState(0);
     const [ageRecommendation, setAgeRecommendation] = useState(0);
+    const [description, setDescription] = useState("");
     const [categories, setCategories] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState(0);
+    const [selectedCategories, setSelectedCategories] = useState([]);
     const navigate = useNavigate();
 
     const tokenString = localStorage.getItem("rater_token");
@@ -38,8 +39,9 @@ export const NewGame = () => {
             yearReleased,
             numberOfPlayers,
             estimatedTimeToPlay,
+            description,
             ageRecommendation,
-            categories: selectedCategory
+            categories: selectedCategories
         };
 
         const fetchOptions = {
@@ -74,6 +76,16 @@ export const NewGame = () => {
                         className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
                     />
                 </div>
+                <div className="mb-4">
+                <label htmlFor="description" className="block text-gray-700 font-bold mb-2">Description:</label>
+                <textarea
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    rows="4"
+                />
+            </div>
                 <div className="mb-4">
                     <label htmlFor="designer" className="block text-gray-700 font-bold mb-2">Designer:</label>
                     <input 
@@ -126,16 +138,27 @@ export const NewGame = () => {
                 </div>
                 <div className="mb-4">
                     <label htmlFor="categories" className="block text-gray-700 font-bold mb-2">Categories:</label>
-                    <select 
-                        id="categories" 
-                        onChange={(e) => setSelectedCategory(parseInt(e.target.value))} 
-                        className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="0" disabled>Select a category</option>
+                    <div id="categories" className="flex flex-wrap">
                         {categories.map(category => (
-                            <option key={category.id} value={category.id}>{category.name}</option>
+                            <div key={category.id} className="mr-4 mb-2">
+                                <input 
+                                    type="checkbox" 
+                                    id={`category-${category.id}`} 
+                                    value={category.id} 
+                                    onChange={(e) => {
+                                        const value = parseInt(e.target.value);
+                                        if (e.target.checked) {
+                                            setSelectedCategories(prev => [...prev, value]);
+                                        } else {
+                                            setSelectedCategories(prev => prev.filter(id => id !== value));
+                                        }
+                                    }} 
+                                    className="mr-2"
+                                />
+                                <label htmlFor={`category-${category.id}`}>{category.name}</label>
+                            </div>
                         ))}
-                    </select>
+                    </div>
                 </div>
                 <button 
                     onClick={handleClickSaveGame} 
