@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { getCurrentUser } from "../services/userService";
 
-export const NewGame = () => {
+export const UpdateGame = () => {
+    const [user, setUser] = useState({})
     const [title, setTitle] = useState("");
     const [designer, setDesigner] = useState("");
     const [yearReleased, setYearReleased] = useState(0);
@@ -12,6 +14,7 @@ export const NewGame = () => {
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const navigate = useNavigate();
+    const {gameId} = useParams();
 
     const tokenString = localStorage.getItem("rater_token");
     const tokenObject = JSON.parse(tokenString);
@@ -29,6 +32,34 @@ export const NewGame = () => {
             });
     }, []);
 
+    // grab the current user
+        useEffect(()=>{
+        getCurrentUser()
+            .then((user) => {
+                setUser(user)
+            })
+    }
+    ,[])
+
+    useEffect(() => {
+        fetch(`http://localhost:8000/games/${gameId}`, {
+            headers: {
+                "Authorization": `Token ${token}`,
+            }
+        })
+            .then(res => res.json())
+            .then((data) => {
+                setTitle(data.title || "");
+                setDesigner(data.designer || "");
+                setYearReleased(data.yearReleased || 0);
+                setNumberOfPlayers(data.numberOfPlayers || 0);
+                setEstimatedTimeToPlay(data.estimatedTimeToPlay || 0);
+                setAgeRecommendation(data.ageRecommendation || 0);
+                setDescription(data.description || "");
+                setSelectedCategories(data.categories.map(category => category.id) || []);
+            });
+    }, [gameId, token]);
+
 
     const handleClickSaveGame = (event) => {
         event.preventDefault();
@@ -45,7 +76,7 @@ export const NewGame = () => {
         };
 
         const fetchOptions = {
-            method: "POST",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Token ${token}`
@@ -53,14 +84,25 @@ export const NewGame = () => {
             body: JSON.stringify(newGame)
         };
 
-        fetch("http://localhost:8000/games", fetchOptions)
-            .then(response => response.json())
-            .then((data) => {
-                setCategories(data)
-            });
+        fetch(`http://localhost:8000/games/${gameId}`, fetchOptions)
+        .then(response => {
+            if (response.status === 204) {
+                return null; // No content to parse
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (data) {
+                setCategories(data);
+            }
+            navigate("/games");
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 
 
-        navigate("/games");
+        
     };
 
     return (

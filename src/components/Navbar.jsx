@@ -11,12 +11,6 @@ export const Navbar = ({ currentUser }) => {
                     <Link to="/" className="text-white hover:text-gray-400">Home</Link>
                 </div>
                 <div>
-                    <Link to="/games" className="text-white hover:text-gray-400">Games</Link>
-                </div>
-                <div>
-                    <Link to="/reviews" className="text-white hover:text-gray-400">Reviews</Link>
-                </div>
-                <div>
                     {localStorage.getItem("rater_token") && (
                         <Link
                             to=""

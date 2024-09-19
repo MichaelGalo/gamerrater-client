@@ -6,6 +6,7 @@ import { Games } from "../views/Games";
 import { GameDetails } from "../views/GameDetails";
 import { NewGame } from "../views/NewGame";
 import { GameReview } from "../views/GameReview";
+import { UpdateGame } from "../views/EditGame";
 
 export const ApplicationsViews = () => {
     const [currentUser, setCurrentUser] = useState({});
@@ -26,9 +27,10 @@ export const ApplicationsViews = () => {
           </>
         }
       >
-        <Route index element={<Home />} />
+        <Route index element={<Games />} />
         <Route path="games" element={<Games />} />
         <Route path="games/:gameId" element={<GameDetails />} />
+        <Route path="games/:gameId/update" element={<UpdateGame />} />
         <Route exact path="/games/:gameId/review" element={<GameReview />}/>
         <Route path="new-game" element={<NewGame />} />
     </Route>
