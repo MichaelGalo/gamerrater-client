@@ -29,7 +29,7 @@ export const ApplicationsViews = () => {
         <Route index element={<Home />} />
         <Route path="games" element={<Games />} />
         <Route path="games/:gameId" element={<GameDetails />} />
-        <Route exact path="/games/:gameId/review" element={<GameReview/>}/>
+        <Route exact path="/games/:gameId/review" element={<GameReview />}/>
         <Route path="new-game" element={<NewGame />} />
     </Route>
     </Routes>

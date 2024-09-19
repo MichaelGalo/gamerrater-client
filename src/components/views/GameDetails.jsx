@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 
 export const GameDetails = () => {
     const gameId = useParams().gameId
+    const [reviews, setReviews] = useState([])
     const [game, setGame] = useState({})
     const tokenString = localStorage.getItem("rater_token");
     const tokenObject = JSON.parse(tokenString);
@@ -20,7 +21,18 @@ export const GameDetails = () => {
                 setGame(data)
             })
     }, [gameId])
-
+    
+    useEffect(()=>{
+        fetch(`http://localhost:8000/reviews/${gameId}`, {
+            headers: {
+                "Authorization": `Token ${token}`,
+            }
+        })
+            .then(res => res.json())
+            .then((data) => {
+                setReviews(data)
+            })
+    },[gameId])
 
     return (
         <article className="justify-center flex content-center p-6 mx-auto">
@@ -50,8 +62,7 @@ export const GameDetails = () => {
                 <ul>
                     {game.reviews.map((review) => (
                         <div key={review.id}>
-                            <p><strong>{review.reviewer_name}:</strong> {review.text}</p>
-                            <p><strong>Rating:</strong> {review.rating}</p>
+                            <p><strong>{review.user.first_name} {review.user.last_name}:</strong> {review.content}</p>
                         </div>
                     ))}
                 </ul>
