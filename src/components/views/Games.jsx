@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export const Games = () => {
     const [games, setGames] = useState([]);
-    const navigate = useNavigate(); // Move useNavigate to the top level of the component
+    const navigate = useNavigate();
 
     useEffect(() => {
         const tokenString = localStorage.getItem("rater_token");
