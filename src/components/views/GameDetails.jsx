@@ -6,6 +6,7 @@ export const GameDetails = () => {
     const gameId = useParams().gameId
     const [currentUser, setCurrentUser] = useState({})
     const [reviews, setReviews] = useState([])
+    const [averageRating, setAverageRating] = useState(0)
     const [game, setGame] = useState({})
     const tokenString = localStorage.getItem("rater_token");
     const tokenObject = JSON.parse(tokenString);
@@ -19,8 +20,9 @@ export const GameDetails = () => {
         }
         fetchCurrentUser()
     },[])
-
-    useEffect(() => {
+    
+    useEffect(()=>{
+            //games fetch
         fetch(`http://localhost:8000/games/${gameId}`, {
             headers: {
                 "Authorization": `Token ${token}`,
@@ -30,9 +32,8 @@ export const GameDetails = () => {
             .then((data) => {
                 setGame(data)
             })
-    }, [gameId])
-    
-    useEffect(()=>{
+
+            // reviews fetch
         fetch(`http://localhost:8000/reviews/${gameId}`, {
             headers: {
                 "Authorization": `Token ${token}`,
@@ -54,6 +55,7 @@ export const GameDetails = () => {
                 <p><strong>Number of Players:</strong> {game.number_of_players}</p>
                 <p><strong>Estimated Time to Play:</strong> {game.estimated_time_to_play}</p>
                 <p><strong>Age Recommendation:</strong> {game.age_recommendation}</p>
+                <p><strong>Average Rating: </strong> {game.average_rating.toFixed(2)}/5</p>
                 <p><strong>Categories:</strong> {game.categories?.map((category)=>{
                     return <li key={category.id}>{category.name}</li>
                 })}</p>
