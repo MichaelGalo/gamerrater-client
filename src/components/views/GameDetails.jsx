@@ -55,7 +55,7 @@ export const GameDetails = () => {
                 <p><strong>Number of Players:</strong> {game.number_of_players}</p>
                 <p><strong>Estimated Time to Play:</strong> {game.estimated_time_to_play}</p>
                 <p><strong>Age Recommendation:</strong> {game.age_recommendation}</p>
-                <p><strong>Average Rating: </strong> {game.average_rating.toFixed(2)}/5</p>
+                <p><strong>Average Rating: </strong> {game.average_rating?.toFixed(2)}/5</p>
                 <p><strong>Categories:</strong> {game.categories?.map((category)=>{
                     return <li key={category.id}>{category.name}</li>
                 })}</p>
@@ -66,6 +66,13 @@ export const GameDetails = () => {
                         navigate(`/games/${gameId}/review`)
                     }}
                     >Review this Game</button>
+
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-700 m-2"
+                    onClick={()=>{
+                        navigate(`/games/${gameId}/image-form`)
+                    }}>
+                        Upload Action Picture
+                    </button>
 
                     {currentUser.id === game.user?.id && (
                         <button
