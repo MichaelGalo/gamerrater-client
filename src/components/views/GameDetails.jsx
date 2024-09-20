@@ -1,14 +1,24 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
+import { getCurrentUser } from "../services/userService"
 
 export const GameDetails = () => {
     const gameId = useParams().gameId
+    const [currentUser, setCurrentUser] = useState({})
     const [reviews, setReviews] = useState([])
     const [game, setGame] = useState({})
     const tokenString = localStorage.getItem("rater_token");
     const tokenObject = JSON.parse(tokenString);
     const token = tokenObject.token;
     const navigate = useNavigate()
+
+    useEffect(()=>{
+        const fetchCurrentUser = async () => {
+            const user = await getCurrentUser()
+            setCurrentUser(user)
+        }
+        fetchCurrentUser()
+    },[])
 
     useEffect(() => {
         fetch(`http://localhost:8000/games/${gameId}`, {
@@ -49,11 +59,20 @@ export const GameDetails = () => {
                 })}</p>
                 <br />
                 <div>                
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-700"
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-700 m-2"
                     onClick={()=>{
                         navigate(`/games/${gameId}/review`)
                     }}
                     >Review this Game</button>
+
+                    {currentUser.id === game.user?.id && (
+                        <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-700 m-2"
+                        onClick={() => navigate(`/games/${gameId}/update`)}
+                      >
+                        Update this Game
+                      </button>
+                    )}
                 </div>
             </div>
             {game.reviews && game.reviews.length > 0 && (

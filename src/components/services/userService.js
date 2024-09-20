@@ -1,4 +1,4 @@
-export const getCurrentUser = () => {
+export const getCurrentUser = async () => {
     const tokenString = localStorage.getItem("rater_token");
     if (!tokenString) {
         return Promise.reject("No token found");
@@ -7,7 +7,7 @@ export const getCurrentUser = () => {
     const tokenObject = JSON.parse(tokenString);
     const token = tokenObject.token;
 
-    return fetch(`http://localhost:8000/current_user`, {
+    return await fetch(`http://localhost:8000/current_user`, {
         method: "GET",
         headers: {
             "Authorization": `Token ${token}`,

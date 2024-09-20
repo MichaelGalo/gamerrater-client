@@ -51,10 +51,10 @@ export const UpdateGame = () => {
             .then((data) => {
                 setTitle(data.title || "");
                 setDesigner(data.designer || "");
-                setYearReleased(data.yearReleased || 0);
-                setNumberOfPlayers(data.numberOfPlayers || 0);
-                setEstimatedTimeToPlay(data.estimatedTimeToPlay || 0);
-                setAgeRecommendation(data.ageRecommendation || 0);
+                setYearReleased(data.year_released || 0);
+                setNumberOfPlayers(data.number_of_players || 0);
+                setEstimatedTimeToPlay(data.estimated_time_to_play || 0);
+                setAgeRecommendation(data.age_recommendation || 0);
                 setDescription(data.description || "");
                 setSelectedCategories(data.categories.map(category => category.id) || []);
             });
@@ -187,6 +187,7 @@ export const UpdateGame = () => {
                                     type="checkbox" 
                                     id={`category-${category.id}`} 
                                     value={category.id} 
+                                    checked={selectedCategories.includes(category.id)}
                                     onChange={(e) => {
                                         const value = parseInt(e.target.value);
                                         if (e.target.checked) {
