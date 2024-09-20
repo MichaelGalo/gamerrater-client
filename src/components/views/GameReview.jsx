@@ -5,6 +5,7 @@ import { getCurrentUser } from "../services/userService"
 export const GameReview = () => {
     const [user, setUser] = useState({})
     const [game, setGame] = useState({})
+    const [rating, setRating] = useState(0)
     const [reviewText, setReviewText] = useState("")
     const tokenString = localStorage.getItem("rater_token");
     const tokenObject = JSON.parse(tokenString);
@@ -37,10 +38,12 @@ export const GameReview = () => {
     const handleReview = (e) => {
         e.preventDefault()
         
+
+        // submit review fetch call
         let new_review = {
             user: user.id,
             content: reviewText,
-            game: gameId
+            game: gameId,
         }
 
         fetch(`http://localhost:8000/reviews`, {
@@ -58,7 +61,35 @@ export const GameReview = () => {
             return response.json();
         })
         .then(data => {
-            console.log('Success:', data);
+            navigate(`/games/${gameId}`);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+
+        // Submit Rating Fetch Call
+        let new_rating = {
+            user: user.id,
+            game: gameId,
+            score: rating
+        }
+
+        fetch(`http://localhost:8000/rating`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Token ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(new_rating)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
             navigate(`/games/${gameId}`);
         })
         .catch((error) => {
@@ -89,6 +120,22 @@ export const GameReview = () => {
                             onChange={(e) => setReviewText(e.target.value)}
                             required
                         />
+                        <div className="rating-container">
+                        <label htmlFor="rating" className="flex mx-0 block text-gray-700 text-sm font-bold mb-2">Rate on a scale of 1-5</label>
+                        <select 
+                        name="rating" 
+                        id="rating" 
+                        className="flex mx-0 w-20 text-center text-lg font-bold border-blue-400 border-solid"
+                        value={rating}
+                        onChange={(e) => setRating(parseInt(e.target.value))}>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        </div>
                     </div>
                     <div className="flex items-center justify-between">
                         <button
